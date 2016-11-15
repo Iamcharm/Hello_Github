@@ -1,0 +1,417 @@
+﻿<UserControl xmlns:c1="http://schemas.componentone.com/winfx/2006/xaml"  
+             x:Class="WpfApplication3.Tab_BondFund"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WpfApplication3"
+             xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" 
+             xmlns:dxc="http://schemas.devexpress.com/winfx/2008/xaml/charts" 
+             mc:Ignorable="d" >
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <Style x:Key="dgCellRightAlignment" TargetType="TextBlock">
+                <Setter Property="TextAlignment" Value="Right"/>
+                <Setter Property="HorizontalAlignment" Value="Right"></Setter>
+            </Style>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid>
+        <DockPanel x:Name="panel_bond" LastChildFill="True" Margin="0,-5,0,0"  Background="Transparent">
+            <StackPanel DockPanel.Dock="Top" HorizontalAlignment="Left" Height="28"  Width="500" Orientation="Horizontal" >
+                <!--<Label Content="组合名称" HorizontalAlignment="Left" Height="26"  Margin="10,3,0,-1" VerticalAlignment="Center" Width="60" FontSize="10.667" Background="Transparent" FontFamily="Microsoft YaHei" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontWeight="Bold"/>
+                <ComboBox x:Name="portfolioBox_bond" HorizontalAlignment="Left" Height="26" Margin="5,4,0,-2" VerticalAlignment="Center" Width="130"  FontSize="10.667" />
+                <DatePicker x:Name="selectDate_bond" Margin="5,5,0,-3" Height="26" VerticalAlignment="Center" Width="120"/>
+                <Button Margin="5,8,0,0" Height="20" VerticalAlignment="Center" Content="Button" Width="75" Click="Button_Click"/>-->
+
+                <Label Content="组合名称" Height="25" VerticalAlignment="Top" VerticalContentAlignment="Center" Margin="2,1"/>
+                <ComboBox Name="portfolioBox_bond" Height="25" Width="140" VerticalAlignment="Top" VerticalContentAlignment="Center" Margin="2,1"/>
+                <Label Content="日期" Height="25" VerticalAlignment="Top" VerticalContentAlignment="Center" Margin="15,1,2,2"/>
+                <DatePicker Name="selectDate_bond" Height="25" Width="120" VerticalAlignment="Top" VerticalContentAlignment="Center" Margin="1,1"/>
+                <Button Content="计算" Height="25" Width="60" VerticalAlignment="Top" VerticalContentAlignment="Center" Margin="15,1,0,0" Click="Button_Click"/>
+            </StackPanel>
+            <dx:DXTabControl Margin="0,3,0,0">
+                <dx:DXTabItem Header="关键指标">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0*"/>
+                            <ColumnDefinition Width="223*"/>
+                            <ColumnDefinition Width="223*"/>
+                            <ColumnDefinition Width="224*"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0" Grid.ColumnSpan="2">
+                            <Label Content="关键指标统计" Margin="10,2,10,0" HorizontalContentAlignment="Center" FontWeight="Bold" >
+                                <Label.Background>
+                                    <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                                        <GradientStop Color="#FF0452FB" Offset="0"/>
+                                        <GradientStop Color="#FF0452FB" Offset="1"/>
+                                        <GradientStop Color="#FFFBFBF5" Offset="0.504"/>
+                                    </LinearGradientBrush>
+                                </Label.Background>
+                            </Label>
+                            <DataGrid x:Name="bf_keyIndexGrid" 
+                                                  Grid.Column="0" 
+                                                  HorizontalAlignment="Center" 
+                                                  CanUserDeleteRows="False" 
+                                                  VerticalAlignment="Top" Width="420" 
+                                                  CanUserAddRows="False" 
+                                                  AutoGenerateColumns="True" ColumnWidth="*" 
+                                                  IsReadOnly="True" 
+                                                  CanUserSortColumns="False" Margin="10,0">
+                                <!--<DataGrid.Columns>
+                                    <DataGridTextColumn Binding="{Binding Path=Name}" />
+                                    <DataGridTextColumn Binding="{Binding Path=IndexValue}" />
+                                </DataGrid.Columns>-->
+                            </DataGrid>
+
+                            <ListView Margin="10,1,10,0"/>
+                            <Label Content="大类资产配置" Margin="10,2,10,0" HorizontalContentAlignment="Center" FontWeight="Bold" >
+                                <Label.Background>
+                                    <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                                        <GradientStop Color="#FF0452FB" Offset="0"/>
+                                        <GradientStop Color="#FF0452FB" Offset="1"/>
+                                        <GradientStop Color="#FFFBFBF5" Offset="0.504"/>
+                                    </LinearGradientBrush>
+                                </Label.Background>
+                            </Label>
+                            <DataGrid x:Name="bf_aa" 
+                                                  Grid.Column="0" 
+                                                  HorizontalAlignment="Center" 
+                                                  VerticalAlignment="Top" Width="420" 
+                                                  CanUserAddRows="False" 
+                                                  CanUserDeleteRows="False" 
+                                                  AutoGenerateColumns="False" ColumnWidth="*" 
+                                                  IsReadOnly="True" 
+                                                  CanUserSortColumns="False" Margin="10,0">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Binding="{Binding Path=gzdate}" Header="日期"/>
+                                    <DataGridTextColumn Binding="{Binding Path=asset_type}" Header="资产类别" ElementStyle="{StaticResource dgCellRightAlignment}"/>
+                                    <DataGridTextColumn Binding="{Binding Path=asset_ratio,StringFormat=' {0:F1}%'}" Header="比例" ElementStyle="{StaticResource dgCellRightAlignment}"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            <ListView Margin="10,1,10,0"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="2">
+                            <Label Content="债券券种配置" Margin="10,2,10,0" HorizontalContentAlignment="Center" FontWeight="Bold" >
+                                <Label.Background>
+                                    <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                                        <GradientStop Color="#FF0452FB" Offset="0"/>
+                                        <GradientStop Color="#FF0452FB" Offset="1"/>
+                                        <GradientStop Color="#FFFBFBF5" Offset="0.504"/>
+                                    </LinearGradientBrush>
+                                </Label.Background>
+                            </Label>
+                            <DataGrid x:Name="bf_bondnature" 
+                                                  Grid.Column="0" 
+                                                  HorizontalAlignment="Center" 
+                                                  VerticalAlignment="Top" Width="420" 
+                                                  CanUserDeleteRows="False" 
+                                                  CanUserAddRows="False" 
+                                                  AutoGenerateColumns="False" ColumnWidth="*" 
+                                                  IsReadOnly="True" 
+                                                  CanUserSortColumns="False" Margin="10,0">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Binding="{Binding Path=gzdate}" Header="日期"/>
+                                    <DataGridTextColumn Binding="{Binding Path=bondtype}" Header="债券类别" ElementStyle="{StaticResource dgCellRightAlignment}"/>
+                                    <DataGridTextColumn Binding="{Binding Path=asset_ratio,StringFormat=' {0:F1}%'}" Header="比例" ElementStyle="{StaticResource dgCellRightAlignment}"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            <ListView Margin="10,1,10,0"/>
+                            <Label Content="市场配置" Margin="10,2,10,0" HorizontalContentAlignment="Center" FontWeight="Bold" >
+                                <Label.Background>
+                                    <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                                        <GradientStop Color="#FF0452FB" Offset="0"/>
+                                        <GradientStop Color="#FF0452FB" Offset="1"/>
+                                        <GradientStop Color="#FFFBFBF5" Offset="0.504"/>
+                                    </LinearGradientBrush>
+                                </Label.Background>
+                            </Label>
+                            <DataGrid x:Name="bf_secumarket" 
+                                                  Grid.Column="0" 
+                                                  HorizontalAlignment="Center" 
+                                                  VerticalAlignment="Top" Width="420" 
+                                                  CanUserAddRows="False" 
+                                                  CanUserDeleteRows="False" 
+                                                  AutoGenerateColumns="False" ColumnWidth="*" 
+                                                  IsReadOnly="True" 
+                                                  CanUserSortColumns="False" Margin="10,0">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Binding="{Binding Path=gzdate}" Header="日期"/>
+                                    <DataGridTextColumn Binding="{Binding Path=secumarket_type}" Header="市场名称" ElementStyle="{StaticResource dgCellRightAlignment}"/>
+                                    <DataGridTextColumn Binding="{Binding Path=asset_ratio,StringFormat=' {0:F1}%'}" Header="比例" ElementStyle="{StaticResource dgCellRightAlignment}"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            <ListView Margin="10,1,10,0"/>
+                            <Label Content="利率类型" Margin="10,2,10,0" HorizontalContentAlignment="Center" FontWeight="Bold" >
+                                <Label.Background>
+                                    <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                                        <GradientStop Color="#FF0452FB" Offset="0"/>
+                                        <GradientStop Color="#FF0452FB" Offset="1"/>
+                                        <GradientStop Color="#FFFBFBF5" Offset="0.504"/>
+                                    </LinearGradientBrush>
+                                </Label.Background>
+                            </Label>
+                            <DataGrid x:Name="bf_compoundmethod" 
+                                                  Grid.Column="0" 
+                                                  HorizontalAlignment="Center" 
+                                                  VerticalAlignment="Top" Width="420" 
+                                                  CanUserAddRows="False" 
+                                                  CanUserDeleteRows="False" 
+                                                  AutoGenerateColumns="False" ColumnWidth="*" 
+                                                  IsReadOnly="True" 
+                                                  CanUserSortColumns="False" Margin="10,0">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Binding="{Binding Path=gzdate}" Header="日期"/>
+                                    <DataGridTextColumn Binding="{Binding Path=compoundmethod_type}" Header="利率类型" ElementStyle="{StaticResource dgCellRightAlignment}"/>
+                                    <DataGridTextColumn Binding="{Binding Path=asset_ratio,StringFormat=' {0:F1}%'}" Header="比例" ElementStyle="{StaticResource dgCellRightAlignment}"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            <ListView Margin="10,1,10,0"/>
+
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="3">
+                            <Label Content="债券期限分布(到期)" Margin="10,2,10,0" HorizontalContentAlignment="Center" FontWeight="Bold" >
+                                <Label.Background>
+                                    <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                                        <GradientStop Color="#FF0452FB" Offset="0"/>
+                                        <GradientStop Color="#FF0452FB" Offset="1"/>
+                                        <GradientStop Color="#FFFBFBF5" Offset="0.504"/>
+                                    </LinearGradientBrush>
+                                </Label.Background>
+                            </Label>
+                            <DataGrid x:Name="bf_enddate" 
+                                                  Grid.Column="0" 
+                                                  HorizontalAlignment="Center" 
+                                                  VerticalAlignment="Top" Width="420" 
+                                                  CanUserAddRows="False" 
+                                                  CanUserDeleteRows="False" 
+                                                  AutoGenerateColumns="False" ColumnWidth="*" 
+                                                  IsReadOnly="True" 
+                                                  CanUserSortColumns="False" Margin="10,0">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Binding="{Binding Path=gzdate}" Header="日期"/>
+                                    <DataGridTextColumn Binding="{Binding Path=剩余期限}" Header="剩余期限"/>
+                                    <DataGridTextColumn Binding="{Binding Path=asset_ratio,StringFormat=' {0:F1}%'}" Header="比例" ElementStyle="{StaticResource dgCellRightAlignment}"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            <ListView Margin="10,1,10,0"/>
+
+                            <Label Content="信用债配置期限比例" Margin="10,2,10,0" HorizontalContentAlignment="Center" FontWeight="Bold" >
+                                <Label.Background>
+                                    <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                                        <GradientStop Color="#FF0452FB" Offset="0"/>
+                                        <GradientStop Color="#FF0452FB" Offset="1"/>
+                                        <GradientStop Color="#FFFBFBF5" Offset="0.504"/>
+                                    </LinearGradientBrush>
+                                </Label.Background>
+                            </Label>
+                            <DataGrid x:Name="bf_creditenddate" 
+                                                  Grid.Column="0" 
+                                                  HorizontalAlignment="Center" 
+                                                  VerticalAlignment="Top" Width="420" 
+                                                  CanUserAddRows="False" 
+                                                  CanUserDeleteRows="False" 
+                                                  AutoGenerateColumns="False" ColumnWidth="*" 
+                                                  IsReadOnly="True" 
+                                                  CanUserSortColumns="False" Margin="10,0">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Binding="{Binding Path=gzdate}" Header="日期"/>
+                                    <DataGridTextColumn Binding="{Binding Path=剩余期限}" Header="剩余期限"/>
+                                    <DataGridTextColumn Binding="{Binding Path=asset_ratio,StringFormat=' {0:F1}%'}" Header="比例" ElementStyle="{StaticResource dgCellRightAlignment}"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            <ListView Margin="10,1,10,0"/>
+                            <Label Content="主体信用评级" Margin="10,2,10,0" HorizontalContentAlignment="Center" FontWeight="Bold" >
+                                <Label.Background>
+                                    <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                                        <GradientStop Color="#FF0452FB" Offset="0"/>
+                                        <GradientStop Color="#FF0452FB" Offset="1"/>
+                                        <GradientStop Color="#FFFBFBF5" Offset="0.504"/>
+                                    </LinearGradientBrush>
+                                </Label.Background>
+                            </Label>
+                            <DataGrid x:Name="bf_ztrating" 
+                                                  Grid.Column="0" 
+                                                  HorizontalAlignment="Center" 
+                                                  VerticalAlignment="Top" Width="420" 
+                                                  CanUserAddRows="False" 
+                                                  CanUserDeleteRows="False" 
+                                                  AutoGenerateColumns="False" ColumnWidth="*" 
+                                                  IsReadOnly="True" 
+                                                  CanUserSortColumns="False" Margin="10,0">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Binding="{Binding Path=gzdate}" Header="日期"/>
+                                    <DataGridTextColumn Binding="{Binding Path=ztrating}" Header="主体评级"/>
+                                    <DataGridTextColumn Binding="{Binding Path=asset_ratio,StringFormat=' {0:F1}%'}" Header="比例" ElementStyle="{StaticResource dgCellRightAlignment}"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            <ListView Margin="10,1,10,0"/>
+
+                            <Label Content="债项信用评级" Margin="10,2,10,0" HorizontalContentAlignment="Center" FontWeight="Bold" >
+                                <Label.Background>
+                                    <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                                        <GradientStop Color="#FF0452FB" Offset="0"/>
+                                        <GradientStop Color="#FF0452FB" Offset="1"/>
+                                        <GradientStop Color="#FFFBFBF5" Offset="0.504"/>
+                                    </LinearGradientBrush>
+                                </Label.Background>
+                            </Label>
+                            <DataGrid x:Name="bf_zxrating" 
+                                                  Grid.Column="0" 
+                                                  HorizontalAlignment="Center" 
+                                                  VerticalAlignment="Top" Width="420" 
+                                                  CanUserAddRows="False" 
+                                                  CanUserDeleteRows="False" 
+                                                  AutoGenerateColumns="False" ColumnWidth="*" 
+                                                  IsReadOnly="True" 
+                                                  CanUserSortColumns="False" Margin="10,0">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Binding="{Binding Path=gzdate}" Header="日期"/>
+                                    <DataGridTextColumn Binding="{Binding Path=zxrating}" Header="债项评级"/>
+                                    <DataGridTextColumn Binding="{Binding Path=asset_ratio,StringFormat=' {0:F1}%'}" Header="比例" ElementStyle="{StaticResource dgCellRightAlignment}"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                            <ListView Margin="10,1,10,0"/>
+                        </StackPanel>
+
+                    </Grid>
+                </dx:DXTabItem>
+                <dx:DXTabItem Header="债券明细">
+                    <DockPanel LastChildFill="True">
+                        <!--<StackPanel Orientation="Horizontal" Height="25" DockPanel.Dock="Top">
+                            <RadioButton Content="全部" Margin="0,0,0,0" Height="20" VerticalAlignment="Center" IsChecked="True" Name="bond_securitydetail0" Click="bond_securitydetail0_Click"/>
+                            <RadioButton Content="债券（纯债）" Margin="10,0,0,0" Height="20" VerticalAlignment="Center" Name="bond_securitydetail1" Click="bond_securitydetail1_Click"/>
+                            <RadioButton Content="可转债" Height="20" Margin="10,0,0,0" VerticalAlignment="Center" Name="bond_securitydetail2" Click="bond_securitydetail2_Click"/>
+                            <RadioButton Content="资产证券化" Margin="10,0,0,0" Height="20" VerticalAlignment="Center" Name="bond_securitydetail3" Click="bond_securitydetail3_Click"/>
+                            <RadioButton Content="股票" Margin="10,0,0,0" Height="20" VerticalAlignment="Center" Name="bond_securitydetail4" Click="bond_securitydetail4_Click"/>
+                            <RadioButton Content="基金" Margin="10,0,0,0" Height="20" VerticalAlignment="Center" Name="bond_securitydetail5" Click="bond_securitydetail5_Click"/>
+                        </StackPanel>-->
+                        <DataGrid x:Name="bf_bonddetail" 
+                                                  Grid.Column="0" 
+                                                  HorizontalAlignment="Center" 
+                                                  VerticalAlignment="Top"
+                                                  CanUserAddRows="False" 
+                                                  AutoGenerateColumns="False" ColumnWidth="*" 
+                                                  IsReadOnly="True" 
+                                                  CanUserSortColumns="False" Margin="10,0" Width="1280">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Binding="{Binding Path=gzdate}" Header="日期"/>
+                                <DataGridTextColumn Binding="{Binding Path=fundcode}" Header="基金代码"/>
+                                <DataGridTextColumn Binding="{Binding Path=finance_name}" Header="证券名称"/>
+                                <DataGridTextColumn Binding="{Binding Path=Zxrating}" Header="债项评级"/>
+                                <DataGridTextColumn Binding="{Binding Path=Ztrating}" Header="主体评级"/>
+                                <DataGridTextColumn Binding="{Binding Path=secumarket_type}" Header="市场"/>
+                                <DataGridTextColumn Binding="{Binding Path=compoundmethod_type}" Header="是否浮息"/>
+                                <DataGridTextColumn Binding="{Binding Path=bondtype}" Header="债券类别"/>
+                                <DataGridTextColumn Binding="{Binding Path=cap,StringFormat=' {0:F1}'}" Header="持仓数量" ElementStyle="{StaticResource dgCellRightAlignment}"/>
+                                <DataGridTextColumn Binding="{Binding Path=capvalue,StringFormat=' {0:F1}'}" Header="市值" ElementStyle="{StaticResource dgCellRightAlignment}"/>
+                                <DataGridTextColumn Binding="{Binding Path=asset_ratio,StringFormat=' {0:F2}%'}" Header="比例" ElementStyle="{StaticResource dgCellRightAlignment}"/>
+                                <DataGridTextColumn Binding="{Binding Path=earn,StringFormat=' {0:F1}'}" Header="盈亏" ElementStyle="{StaticResource dgCellRightAlignment}"/>
+                                <DataGridTextColumn Binding="{Binding Path=CoupornRate,StringFormat=' {0:F2}'}" Header="票息" ElementStyle="{StaticResource dgCellRightAlignment}"/>
+                                <DataGridTextColumn Binding="{Binding Path=IssueTerm,StringFormat=' {0:F2}'}" Header="期限" ElementStyle="{StaticResource dgCellRightAlignment}"/>
+                                <DataGridTextColumn Binding="{Binding Path=YTM,StringFormat=' {0:F2}'}" Header="到期收益率" ElementStyle="{StaticResource dgCellRightAlignment}"/>
+                                <DataGridTextColumn Binding="{Binding Path=AdjDuration,StringFormat=' {0:F2}'}" Header="久期" ElementStyle="{StaticResource dgCellRightAlignment}"/>
+                                <DataGridTextColumn Binding="{Binding Path=enddate_}" Header="到期日" ElementStyle="{StaticResource dgCellRightAlignment}"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </DockPanel>
+                </dx:DXTabItem>
+                <dx:DXTabItem Header="可转债明细">
+                    <DockPanel LastChildFill="True">
+                        <DataGrid x:Name="bf_kzzdetail" 
+                                                  Grid.Column="0" 
+                                                  HorizontalAlignment="Center" 
+                                                  VerticalAlignment="Top"
+                                                  CanUserAddRows="False" 
+                                                  AutoGenerateColumns="False" ColumnWidth="*" 
+                                                  IsReadOnly="True" 
+                                                  CanUserSortColumns="False" Margin="10,0" Width="1280">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Binding="{Binding Path=gzdate}" Header="日期"/>
+                                <DataGridTextColumn Binding="{Binding Path=fundcode}" Header="基金代码"/>
+                                <DataGridTextColumn Binding="{Binding Path=finance_name}" Header="证券名称"/>
+                                <DataGridTextColumn Binding="{Binding Path=Ztrating}" Header="主体评级"/>
+                                <DataGridTextColumn Binding="{Binding Path=secumarket_type}" Header="市场"/>
+                                <DataGridTextColumn Binding="{Binding Path=bondtype}" Header="债券类别"/>
+                                <DataGridTextColumn Binding="{Binding Path=cap,StringFormat=' {0:F1}'}" Header="持仓数量" ElementStyle="{StaticResource dgCellRightAlignment}"/>
+                                <DataGridTextColumn Binding="{Binding Path=capvalue,StringFormat=' {0:F1}'}" Header="市值" ElementStyle="{StaticResource dgCellRightAlignment}"/>
+                                <DataGridTextColumn Binding="{Binding Path=asset_ratio,StringFormat=' {0:F2}%'}" Header="比例" ElementStyle="{StaticResource dgCellRightAlignment}"/>
+                                <DataGridTextColumn Binding="{Binding Path=earn,StringFormat=' {0:F1}'}" Header="盈亏" ElementStyle="{StaticResource dgCellRightAlignment}"/>
+                                <DataGridTextColumn Binding="{Binding Path=CoupornRate,StringFormat=' {0:F2}'}" Header="票息" ElementStyle="{StaticResource dgCellRightAlignment}"/>
+                                <DataGridTextColumn Binding="{Binding Path=IssueTerm,StringFormat=' {0:F2}'}" Header="期限" ElementStyle="{StaticResource dgCellRightAlignment}"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </DockPanel>
+                </dx:DXTabItem>
+                <dx:DXTabItem Header="股票明细">
+                    <DockPanel LastChildFill="True">
+                        <DataGrid x:Name="bf_stockdetail" 
+                                                  Grid.Column="0" 
+                                                  HorizontalAlignment="Center" 
+                                                  VerticalAlignment="Top"
+                                                  CanUserAddRows="False" 
+                                                  AutoGenerateColumns="False" ColumnWidth="*" 
+                                                  IsReadOnly="True" 
+                                                  CanUserSortColumns="False" Margin="10,0" Width="1280">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Binding="{Binding Path=gzdate}" Header="日期"/>
+                                <DataGridTextColumn Binding="{Binding Path=fundcode}" Header="基金代码"/>
+                                <DataGridTextColumn Binding="{Binding Path=finance_name}" Header="证券名称"/>
+                                <DataGridTextColumn Binding="{Binding Path=cap,StringFormat=' {0:F1}'}" Header="持仓数量" ElementStyle="{StaticResource dgCellRightAlignment}"/>
+                                <DataGridTextColumn Binding="{Binding Path=capvalue,StringFormat=' {0:F1}'}" Header="市值" ElementStyle="{StaticResource dgCellRightAlignment}"/>
+                                <DataGridTextColumn Binding="{Binding Path=asset_ratio,StringFormat=' {0:F2}%'}" Header="比例" ElementStyle="{StaticResource dgCellRightAlignment}"/>
+                                <DataGridTextColumn Binding="{Binding Path=earn,StringFormat=' {0:F1}'}" Header="盈亏" ElementStyle="{StaticResource dgCellRightAlignment}"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </DockPanel>
+                </dx:DXTabItem>
+                <dx:DXTabItem Header="基金明细">
+                    <DockPanel LastChildFill="True">
+                        <DataGrid x:Name="bf_funddetail" 
+                                                  Grid.Column="0" 
+                                                  HorizontalAlignment="Center" 
+                                                  VerticalAlignment="Top"
+                                                  CanUserAddRows="False" 
+                                                  AutoGenerateColumns="False" ColumnWidth="*" 
+                                                  IsReadOnly="True" 
+                                                  CanUserSortColumns="False" Margin="10,0" Width="1280">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Binding="{Binding Path=gzdate}" Header="日期"/>
+                                <DataGridTextColumn Binding="{Binding Path=fundcode}" Header="基金代码"/>
+                                <DataGridTextColumn Binding="{Binding Path=finance_name}" Header="证券名称"/>
+                                <DataGridTextColumn Binding="{Binding Path=cap,StringFormat=' {0:F1}'}" Header="持仓数量" ElementStyle="{StaticResource dgCellRightAlignment}"/>
+                                <DataGridTextColumn Binding="{Binding Path=capvalue,StringFormat=' {0:F1}'}" Header="市值" ElementStyle="{StaticResource dgCellRightAlignment}"/>
+                                <DataGridTextColumn Binding="{Binding Path=asset_ratio,StringFormat=' {0:F2}%'}" Header="比例" ElementStyle="{StaticResource dgCellRightAlignment}"/>
+                                <DataGridTextColumn Binding="{Binding Path=earn,StringFormat=' {0:F1}'}" Header="盈亏" ElementStyle="{StaticResource dgCellRightAlignment}"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </DockPanel>
+                </dx:DXTabItem>
+                <dx:DXTabItem Header="资产证券化明细">
+                    <DockPanel LastChildFill="True">
+                        <DataGrid x:Name="bf_absdetail" 
+                                    Grid.Column="0" 
+                                    HorizontalAlignment="Center" 
+                                    VerticalAlignment="Top"
+                                    CanUserAddRows="False" 
+                                    AutoGenerateColumns="False" ColumnWidth="*" 
+                                    IsReadOnly="True" 
+                                    CanUserSortColumns="False" Margin="10,0" Width="1280">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Binding="{Binding Path=gzdate}" Header="日期"/>
+                                <DataGridTextColumn Binding="{Binding Path=fundcode}" Header="基金代码"/>
+                                <DataGridTextColumn Binding="{Binding Path=finance_name}" Header="证券名称"/>
+                                <DataGridTextColumn Binding="{Binding Path=cap,StringFormat=' {0:F1}'}" Header="持仓数量" ElementStyle="{StaticResource dgCellRightAlignment}"/>
+                                <DataGridTextColumn Binding="{Binding Path=capvalue,StringFormat=' {0:F1}'}" Header="市值" ElementStyle="{StaticResource dgCellRightAlignment}"/>
+                                <DataGridTextColumn Binding="{Binding Path=asset_ratio,StringFormat=' {0:F2}%'}" Header="比例" ElementStyle="{StaticResource dgCellRightAlignment}"/>
+                                <DataGridTextColumn Binding="{Binding Path=earn,StringFormat=' {0:F1}'}" Header="盈亏" ElementStyle="{StaticResource dgCellRightAlignment}"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </DockPanel>
+                </dx:DXTabItem>
+            </dx:DXTabControl>
+        </DockPanel>
+    </Grid>
+</UserControl>

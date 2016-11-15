@@ -1,0 +1,638 @@
+﻿<UserControl xmlns:c1="http://schemas.componentone.com/winfx/2006/xaml"  x:Class="WpfApplication3.Tab_InvestmentAnalysisTools"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WpfApplication3"
+             xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core" 
+             xmlns:dxc="http://schemas.devexpress.com/winfx/2008/xaml/charts" 
+             mc:Ignorable="d">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <Style x:Key="dgCellRightAlignment" TargetType="TextBlock">
+                <Setter Property="TextAlignment" Value="Right"/>
+                <Setter Property="HorizontalAlignment" Value="Right"></Setter>
+            </Style>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid>
+        <Grid x:Name="panel_yieldcurve"  Margin="0,-5,0,0"  Background="Transparent">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"  MaxWidth="200"/>
+                <ColumnDefinition Width="2"/>
+                <ColumnDefinition Width="5*"/>
+            </Grid.ColumnDefinitions>
+            <GridSplitter Grid.Column="1" Width="2" VerticalAlignment="Stretch"  HorizontalAlignment="Center"/>
+            <TreeView Grid.Column="0">
+                <TreeView.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#FFD7CDCA" Offset="0"/>
+                        <GradientStop Color="White" Offset="1"/>
+                    </LinearGradientBrush>
+                </TreeView.Background>
+                <TreeViewItem Header="收益率曲线">
+                    <TreeViewItem Header="曲线走势跟踪"/>
+                    <TreeViewItem Header="曲线形态和利差跟踪"/>
+                    <TreeViewItem Header="持有期回报分析"/>
+                </TreeViewItem>
+                <TreeViewItem Header="个券分析">
+                    <TreeViewItem Header="价差对比"/>
+                    <TreeViewItem Header="活跃券报价"/>
+                    <TreeViewItem Header="套利敏感性"/>
+                </TreeViewItem>
+            </TreeView>
+
+            <Grid Grid.Column="2">
+                <dx:DXTabControl  Margin="0,0" >
+                    <dx:DXTabControl.View>
+                        <dx:TabControlScrollView AllowHideTabItems="True" AutoHideScrollButtons="False" ScrollButtonsShowMode="WhenNeeded"/>
+                    </dx:DXTabControl.View>
+                    <dx:DXTabItem Header="收益率走势跟踪">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="670"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0">
+                                <StackPanel Height="28" Orientation="Horizontal">
+                                    <DatePicker Name="selectDate_BondYieldTrend_yieldGrid" Width="100" Height="25" Margin="5,2,0,1"/>
+                                    <Button Width="60" Height="25" Margin="10,2,0,1" Content="查询" Click="Button_Click_BondYieldTrend_yieldGrid"/>
+                                </StackPanel>
+                                <Grid >
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="auto"/>
+                                        <RowDefinition Height="2*"/>
+                                    </Grid.RowDefinitions>
+                                    <Grid Grid.Row="0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="{Binding ActualWidth, ElementName=assetname}"/>
+                                            <ColumnDefinition Width="{Binding ActualWidth, ElementName=d5value}" />
+                                            <ColumnDefinition Width="{Binding ActualWidth, ElementName=d5percent}" />
+                                            <ColumnDefinition Width="{Binding ActualWidth, ElementName=d10value}" />
+                                            <ColumnDefinition Width="{Binding ActualWidth, ElementName=d10percent}" />
+                                            <ColumnDefinition Width="{Binding ActualWidth, ElementName=d20value}" />
+                                            <ColumnDefinition Width="{Binding ActualWidth, ElementName=d20percent}" />
+                                            <ColumnDefinition Width="{Binding ActualWidth, ElementName=d60value}" />
+                                            <ColumnDefinition Width="{Binding ActualWidth, ElementName=d60percent}" />
+                                            <ColumnDefinition Width="{Binding ActualWidth, ElementName=value}" />
+                                            <ColumnDefinition Width="{Binding ActualWidth, ElementName=percent}" />
+                                        </Grid.ColumnDefinitions>
+                                        <Border Grid.Column="0" Grid.ColumnSpan="9" BorderBrush="Black" HorizontalAlignment="Center" BorderThickness="0,0,1,0">
+                                            <Grid>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="25"/>
+                                                    <RowDefinition Height="25"/>
+                                                </Grid.RowDefinitions>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="{Binding ActualWidth, ElementName=assetname}"/>
+                                                    <ColumnDefinition Width="{Binding ActualWidth, ElementName=d5value}" />
+                                                    <ColumnDefinition Width="{Binding ActualWidth, ElementName=d5percent}" />
+                                                    <ColumnDefinition Width="{Binding ActualWidth, ElementName=d10value}" />
+                                                    <ColumnDefinition Width="{Binding ActualWidth, ElementName=d10percent}" />
+                                                    <ColumnDefinition Width="{Binding ActualWidth, ElementName=d20value}" />
+                                                    <ColumnDefinition Width="{Binding ActualWidth, ElementName=d20percent}" />
+                                                    <ColumnDefinition Width="{Binding ActualWidth, ElementName=d60value}" />
+                                                    <ColumnDefinition Width="{Binding ActualWidth, ElementName=d60percent}" />
+                                                </Grid.ColumnDefinitions>
+                                                <Label Content="债券涨跌幅统计" Grid.ColumnSpan="9" HorizontalContentAlignment="Center" FontWeight="Bold">
+                                                    <Label.Background>
+                                                        <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                                                            <GradientStop Color="#FF0452FB" Offset="0"/>
+                                                            <GradientStop Color="#FF0452FB" Offset="1"/>
+                                                            <GradientStop Color="#FFFBFBF5" Offset="0.504"/>
+                                                        </LinearGradientBrush>
+                                                    </Label.Background>
+                                                </Label>
+                                                <Border  Grid.Row="1" Grid.Column="0"   HorizontalAlignment="Stretch" BorderThickness="0,1,1,0" BorderBrush="Gray">
+                                                    <Label  Background="#FFFBB843" />
+                                                </Border>
+                                                <Border  Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"  HorizontalAlignment="Stretch" BorderThickness="0,1,1,0" BorderBrush="Gray">
+                                                    <Label HorizontalContentAlignment="Center" Background="#FFFBB843" FontWeight="Bold" Content="5D"/>
+                                                </Border>
+                                                <Border  Grid.Row="1" Grid.Column="3" Grid.ColumnSpan="2"  HorizontalAlignment="Stretch" BorderThickness="0,1,1,0" BorderBrush="Gray">
+                                                    <Label HorizontalContentAlignment="Center" Background="#FFFBB843" FontWeight="Bold" Content="10D"/>
+                                                </Border>
+                                                <Border  Grid.Row="1" Grid.Column="5" Grid.ColumnSpan="2"  HorizontalAlignment="Stretch" BorderThickness="0,1,1,0" BorderBrush="Gray">
+                                                    <Label HorizontalContentAlignment="Center" Background="#FFFBB843" FontWeight="Bold" Content="20D"/>
+                                                </Border>
+                                                <Border  Grid.Row="1" Grid.Column="7" Grid.ColumnSpan="2"  HorizontalAlignment="Stretch" BorderThickness="0,1,1,0" BorderBrush="Gray">
+                                                    <Label HorizontalContentAlignment="Center" Background="#FFFBB843" FontWeight="Bold" Content="60D"/>
+                                                </Border>
+                                            </Grid>
+                                        </Border>
+                                        <Border Grid.Column="9" Grid.ColumnSpan="2" BorderBrush="Black" HorizontalAlignment="Center" BorderThickness="0,0,1,0">
+                                            <Grid>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="25"/>
+                                                    <RowDefinition Height="25"/>
+                                                </Grid.RowDefinitions>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="{Binding ActualWidth, ElementName=value}"/>
+                                                    <ColumnDefinition Width="{Binding ActualWidth, ElementName=percent}"/>
+                                                </Grid.ColumnDefinitions>
+                                                <Label Content="收益率水平" Grid.ColumnSpan="2" HorizontalContentAlignment ="Center">
+                                                    <Label.Background>
+                                                        <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                                                            <GradientStop Color="#FF0452FB" Offset="0"/>
+                                                            <GradientStop Color="#FF0452FB" Offset="1"/>
+                                                            <GradientStop Color="#FFFBFBF5" Offset="0.504"/>
+                                                        </LinearGradientBrush>
+                                                    </Label.Background>
+                                                </Label>
+                                                <Border  Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"  HorizontalAlignment="Stretch" BorderThickness="0,1,1,0" BorderBrush="Gray">
+                                                    <Label HorizontalContentAlignment="Center" Background="#FFFBB843" FontWeight="Bold" Content="收益率"/>
+                                                </Border>
+                                            </Grid>
+                                        </Border>
+                                    </Grid>
+                                    <DataGrid x:Name="BondYieldTrend_yieldGrid" 
+                                              RowHeaderWidth="0" Height="565" Margin="0,0,0,0" Grid.Row="1"
+                                              CanUserDeleteRows="False" 
+                                              CanUserAddRows="False" 
+                                              CanUserSortColumns="False" 
+                                              IsReadOnly="True"
+                                              AutoGenerateColumns="False">
+                                        <DataGrid.ColumnHeaderStyle>
+                                            <Style TargetType="{x:Type DataGridColumnHeader}">
+                                                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                            </Style>
+                                        </DataGrid.ColumnHeaderStyle>
+
+                                        <DataGrid.Columns>
+                                            <DataGridTextColumn Header="名称" Width="*" x:Name="assetname"   Binding="{Binding Path=name1}"/>
+                                            <DataGridTextColumn Header="数值" Width="53" x:Name="d5value"    Binding="{Binding Path=pc05  , StringFormat=\{0:F1\}}" ElementStyle="{StaticResource dgCellRightAlignment}"/>
+                                            <DataGridTextColumn Header="分位" Width="53" x:Name="d5percent"  Binding="{Binding Path=pccd05, StringFormat=\{0:P1\}}" ElementStyle="{StaticResource dgCellRightAlignment}"/>
+                                            <DataGridTextColumn Header="数值" Width="53" x:Name="d10value"   Binding="{Binding Path=pc10  , StringFormat=\{0:F1\}}" ElementStyle="{StaticResource dgCellRightAlignment}"/>
+                                            <DataGridTextColumn Header="分位" Width="53" x:Name="d10percent" Binding="{Binding Path=pccd10, StringFormat=\{0:P1\}}" ElementStyle="{StaticResource dgCellRightAlignment}"/>
+                                            <DataGridTextColumn Header="数值" Width="53" x:Name="d20value"   Binding="{Binding Path=pc20  , StringFormat=\{0:F1\}}" ElementStyle="{StaticResource dgCellRightAlignment}"/>
+                                            <DataGridTextColumn Header="分位" Width="53" x:Name="d20percent" Binding="{Binding Path=pccd20, StringFormat=\{0:P1\}}" ElementStyle="{StaticResource dgCellRightAlignment}"/>
+                                            <DataGridTextColumn Header="数值" Width="53" x:Name="d60value"   Binding="{Binding Path=pc60  , StringFormat=\{0:F1\}}" ElementStyle="{StaticResource dgCellRightAlignment}"/>
+                                            <DataGridTextColumn Header="分位" Width="53" x:Name="d60percent" Binding="{Binding Path=pccd60, StringFormat=\{0:P1\}}" ElementStyle="{StaticResource dgCellRightAlignment}"/>
+                                            <DataGridTextColumn Header="数值" Width="53" x:Name="value"      Binding="{Binding Path=YTM   , StringFormat=\{0:P1\}}" ElementStyle="{StaticResource dgCellRightAlignment}"/>
+                                            <DataGridTextColumn Header="分位" Width="53" x:Name="percent"    Binding="{Binding Path=YTM_CD, StringFormat=\{0:P1\}}" ElementStyle="{StaticResource dgCellRightAlignment}"/>
+                                        </DataGrid.Columns>
+                                    </DataGrid>
+
+                                </Grid>
+                            </StackPanel>
+
+                            <StackPanel Margin="5,0,0,0" Grid.Column="1">
+                                <WrapPanel Orientation="Horizontal">
+                                    <Label Content="起始日期" HorizontalAlignment="Left" Margin="10,2,0,1"/>
+                                    <DatePicker Name="selectDate_BondYieldTrend_yieldChart_start" Width="100" Margin="5,2,0,1"/>
+                                    <Label Content="截止日期" HorizontalAlignment="Left" Margin="10,2,0,1"/>
+                                    <DatePicker Name="selectDate_BondYieldTrend_yieldChart_end" Width="100" Margin="5,2,0,1"/>
+                                    <Button Width="60" Margin="10,2,0,1" Content="查询" Click="Button_Click_BondYieldTrend_yieldChart"/>
+                                    <StackPanel Margin="10,2,0,1" Orientation="Horizontal">
+                                        <Label Content="选择品种" Margin="0,2,0,1"/>
+                                        <ComboBox Name="selectAssetName_BondYieldTrend" Width="150" Height="25" Margin="5,2,0,1"/>
+                                    </StackPanel>
+                                </WrapPanel>
+                                <Label Content="债券收益率走势" HorizontalContentAlignment="Center" Margin="0,5,0,0" FontWeight="Bold">
+                                    <Label.Background>
+                                        <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                                            <GradientStop Color="#FF0452FB" Offset="0"/>
+                                            <GradientStop Color="#FF0452FB" Offset="1"/>
+                                            <GradientStop Color="#FFFBFBF5" Offset="0.504"/>
+                                        </LinearGradientBrush>
+                                    </Label.Background>
+                                </Label>
+                                <dxc:ChartControl Height="280" Width="650">
+                                    <dxc:ChartControl.Legend>
+                                        <dxc:Legend Orientation="Horizontal" HorizontalPosition="Center" Background="Transparent" VerticalPosition="BottomOutside" IndentFromDiagram="0,16,16,16" Visible="True"/>
+                                    </dxc:ChartControl.Legend>
+                                    <dxc:XYDiagram2D Width="400">
+                                        <dxc:LineSeries2D Name="BondYieldTrend_yieldChart"  ArgumentDataMember="pricingdate"  ValueDataMember="YTM" LabelsVisibility="False" CrosshairLabelPattern=" {A:d} {V:P2}"/>
+                                        <dxc:XYDiagram2D.AxisY>
+                                            <dxc:AxisY2D>
+                                                <dxc:AxisY2D.Title>
+                                                    <dxc:AxisTitle Content="收益率曲线" />
+                                                </dxc:AxisY2D.Title>
+                                                <dxc:AxisY2D.WholeRange>
+                                                    <dxc:Range Name="ChartRange"/>
+                                                </dxc:AxisY2D.WholeRange>
+                                                <!--<dxc:AxisY2D.NumericOptions>
+                                                    <dxc:NumericOptions Format="Number"/>
+                                                </dxc:AxisY2D.NumericOptions>-->
+                                            </dxc:AxisY2D>
+                                        </dxc:XYDiagram2D.AxisY>
+                                    </dxc:XYDiagram2D>
+                                    
+                                </dxc:ChartControl>
+                                <Grid Margin="0,5,0,0"   Width="300" Height="150" HorizontalAlignment="Left">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="1*"/>
+                                        <ColumnDefinition Width="2*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Label Grid.Row="0" BorderBrush="Black" Grid.ColumnSpan="2" HorizontalContentAlignment="Center" Background="#FFFBB843" FontWeight="Bold" BorderThickness="1" Content="数据统计"/>
+                                    <Label Grid.Row="1" BorderBrush="Black" Grid.Column="0" HorizontalContentAlignment="Center" Background="#FFECE6E6" BorderThickness="1,0,0,1" Content="样本数"/>
+                                    <TextBox Name="yield_stat_count" Grid.Row="1" BorderBrush="Black" Grid.Column="1" HorizontalContentAlignment="Center" BorderThickness="1,0,1,1">
+                                    </TextBox>
+                                    <Label Grid.Row="2" BorderBrush="Black" Grid.Column="0" HorizontalContentAlignment="Center" Background="#FFECE6E6" BorderThickness="1,0,0,1" Height="26.837" VerticalAlignment="Bottom" Content="最大值"/>
+                                    <TextBox Name="yield_stat_max" Grid.Row="2" BorderBrush="Black" Grid.Column="1" HorizontalContentAlignment="Center" BorderThickness="1,0,1,1"/>
+                                    <Label Grid.Row="3" BorderBrush="Black" Grid.Column="0" HorizontalContentAlignment="Center" Background="#FFECE6E6" BorderThickness="1,0,0,1" Content="最小值"/>
+                                    <TextBox Name="yield_stat_min" Grid.Row="3" BorderBrush="Black" Grid.Column="1" HorizontalContentAlignment="Center" BorderThickness="1,0,1,1"/>
+                                    <Label Grid.Row="4" BorderBrush="Black" Grid.Column="0" HorizontalContentAlignment="Center" Background="#FFECE6E6" BorderThickness="1,0,0,1" Content="平均值"/>
+                                    <TextBox Name="yield_stat_avg" Grid.Row="4" BorderBrush="Black" Grid.Column="1" HorizontalContentAlignment="Center" BorderThickness="1,0,1,1"/>
+                                    <Label Grid.Row="5" BorderBrush="Black" Grid.Column="0" HorizontalContentAlignment="Center" Background="#FFECE6E6" BorderThickness="1,0,0,1" Content="期末值"/>
+                                    <TextBox Name="yield_stat_last" Grid.Row="5" BorderBrush="Black" Grid.Column="1" HorizontalContentAlignment="Center" BorderThickness="1,0,1,1"/>
+                                </Grid>
+                            </StackPanel>
+                        </Grid>
+                    </dx:DXTabItem>
+                    <dx:DXTabItem Header="曲线形态和利差">
+                        <Grid Background="Transparent">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="670"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0">
+                                <StackPanel Height="28" Orientation="Horizontal">
+                                    <DatePicker Name="selectDate_BondSpread_Grid" Width="120" Height="25" Margin="5,2,0,1" />
+                                    <Button Width="60" Height="25" Margin="10,2,0,1" Content="查询" Click="Button_Click_BondSpread_Grid" />
+                                </StackPanel>
+                                <Label Content="曲线斜率跟踪" Margin="0,3,0,0" HorizontalContentAlignment="Center" FontWeight="Bold">
+                                    <Label.Background>
+                                        <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                                            <GradientStop Color="#FF0452FB" Offset="0"/>
+                                            <GradientStop Color="#FF0452FB" Offset="1"/>
+                                            <GradientStop Color="#FFFBFBF5" Offset="0.504"/>
+                                        </LinearGradientBrush>
+                                    </Label.Background>
+                                </Label>
+
+                                <Grid >
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="auto"/>
+                                        <RowDefinition Height="2*"/>
+                                    </Grid.RowDefinitions>
+
+                                    <Grid Grid.Row="0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="{Binding ActualWidth, ElementName=termassetname}"/>
+                                            <ColumnDefinition Width="{Binding ActualWidth, ElementName=term31value}" />
+                                            <ColumnDefinition Width="{Binding ActualWidth, ElementName=term31percent}" />
+                                            <ColumnDefinition Width="{Binding ActualWidth, ElementName=term53value}" />
+                                            <ColumnDefinition Width="{Binding ActualWidth, ElementName=term53percent}" />
+                                            <ColumnDefinition Width="{Binding ActualWidth, ElementName=term75value}" />
+                                            <ColumnDefinition Width="{Binding ActualWidth, ElementName=term75percent}" />
+                                            <ColumnDefinition Width="{Binding ActualWidth, ElementName=term107value}" />
+                                            <ColumnDefinition Width="{Binding ActualWidth, ElementName=term107percent}" />
+                                            <ColumnDefinition Width="{Binding ActualWidth, ElementName=term101value}" />
+                                            <ColumnDefinition Width="{Binding ActualWidth, ElementName=term101percent}" />
+                                        </Grid.ColumnDefinitions>
+                                        <Label Grid.Column="0" Background="#FFFBB843" BorderBrush="Black" FontWeight="Bold" BorderThickness="1"/>
+                                        <Label Grid.Column="1" Grid.ColumnSpan="2" Content="3Y-1Y" HorizontalContentAlignment="Center" Background="#FFFBB843" BorderBrush="Black" FontWeight="Bold" BorderThickness="0,1,1,1"/>
+                                        <Label Grid.Column="3" Grid.ColumnSpan="2" Content="5Y-3Y" HorizontalContentAlignment="Center" Background="#FFFBB843" BorderBrush="Black" FontWeight="Bold" BorderThickness="0,1,1,1"/>
+                                        <Label Grid.Column="5" Grid.ColumnSpan="2" Content="7Y-5Y" HorizontalContentAlignment="Center" Background="#FFFBB843" BorderBrush="Black" FontWeight="Bold" BorderThickness="0,1,1,1"/>
+                                        <Label Grid.Column="7" Grid.ColumnSpan="2" Content="10Y-7Y" HorizontalContentAlignment="Center" Background="#FFFBB843" BorderBrush="Black" FontWeight="Bold" BorderThickness="0,1,1,1"/>
+                                        <Label Grid.Column="9" Grid.ColumnSpan="2" Content="10Y-1Y" HorizontalContentAlignment="Center" Background="#FFFBB843" BorderBrush="Black" FontWeight="Bold" BorderThickness="0,1,1,1"/>
+                                    </Grid>
+
+                                    <DataGrid Name="BondSpread_termGrid"
+                                              RowHeaderWidth="0" Height="240" Margin="0,0,0,0" Grid.Row="1"
+                                              CanUserDeleteRows="False" 
+                                              CanUserAddRows="False" 
+                                              CanUserSortColumns="False" 
+                                              IsReadOnly="True"
+                                              AutoGenerateColumns="False">
+                                        <DataGrid.ColumnHeaderStyle>
+                                            <Style TargetType="{x:Type DataGridColumnHeader}">
+                                                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                            </Style>
+                                        </DataGrid.ColumnHeaderStyle>
+                                        <DataGrid.Columns>
+                                            <DataGridTextColumn Header="名称" Width="*" x:Name="termassetname"   Binding="{Binding Path=name}"/>
+                                            <DataGridTextColumn Header="数值" Width="53" x:Name="term31value"    Binding="{Binding Path=3Y1Y    , StringFormat=\{0:F1\}}" ElementStyle="{StaticResource dgCellRightAlignment}"/>
+                                            <DataGridTextColumn Header="分位" Width="53" x:Name="term31percent"  Binding="{Binding Path=3Y1Y_cd , StringFormat=\{0:P1\}}" ElementStyle="{StaticResource dgCellRightAlignment}"/>
+                                            <DataGridTextColumn Header="数值" Width="53" x:Name="term53value"    Binding="{Binding Path=5Y3Y    , StringFormat=\{0:F1\}}" ElementStyle="{StaticResource dgCellRightAlignment}"/>
+                                            <DataGridTextColumn Header="分位" Width="53" x:Name="term53percent"  Binding="{Binding Path=5Y3Y_cd , StringFormat=\{0:P1\}}" ElementStyle="{StaticResource dgCellRightAlignment}"/>
+                                            <DataGridTextColumn Header="数值" Width="53" x:Name="term75value"    Binding="{Binding Path=7Y5Y    , StringFormat=\{0:F1\}}" ElementStyle="{StaticResource dgCellRightAlignment}"/>
+                                            <DataGridTextColumn Header="分位" Width="53" x:Name="term75percent"  Binding="{Binding Path=7Y5Y_cd , StringFormat=\{0:P1\}}" ElementStyle="{StaticResource dgCellRightAlignment}"/>
+                                            <DataGridTextColumn Header="数值" Width="53" x:Name="term107value"   Binding="{Binding Path=10Y7Y   , StringFormat=\{0:F1\}}" ElementStyle="{StaticResource dgCellRightAlignment}"/>
+                                            <DataGridTextColumn Header="分位" Width="53" x:Name="term107percent" Binding="{Binding Path=10Y1Y_cd, StringFormat=\{0:P1\}}" ElementStyle="{StaticResource dgCellRightAlignment}"/>
+                                            <DataGridTextColumn Header="数值" Width="53" x:Name="term101value"   Binding="{Binding Path=10Y1Y   , StringFormat=\{0:F1\}}" ElementStyle="{StaticResource dgCellRightAlignment}"/>
+                                            <DataGridTextColumn Header="分位" Width="53" x:Name="term101percent" Binding="{Binding Path=10Y1Y_cd, StringFormat=\{0:P1\}}" ElementStyle="{StaticResource dgCellRightAlignment}"/>
+                                        </DataGrid.Columns>
+                                    </DataGrid>
+                                </Grid>
+
+                                <Label Content="信用利差跟踪" Margin="0,3,0,0" HorizontalContentAlignment="Center" FontWeight="Bold">
+                                    <Label.Background>
+                                        <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                                            <GradientStop Color="#FF0452FB" Offset="0"/>
+                                            <GradientStop Color="#FF0452FB" Offset="1"/>
+                                            <GradientStop Color="#FFFBFBF5" Offset="0.504"/>
+                                        </LinearGradientBrush>
+                                    </Label.Background>
+                                </Label>
+
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="auto"/>
+                                        <RowDefinition Height="2*"/>
+                                    </Grid.RowDefinitions>
+                                    <Grid Grid.Row="0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="{Binding ActualWidth, ElementName=spassetname}"/>
+                                            <ColumnDefinition Width="{Binding ActualWidth, ElementName=sp1Yvalue}" />
+                                            <ColumnDefinition Width="{Binding ActualWidth, ElementName=sp1Ypercent}" />
+                                            <ColumnDefinition Width="{Binding ActualWidth, ElementName=sp3Yvalue}" />
+                                            <ColumnDefinition Width="{Binding ActualWidth, ElementName=sp3Ypercent}" />
+                                            <ColumnDefinition Width="{Binding ActualWidth, ElementName=sp5Yvalue}" />
+                                            <ColumnDefinition Width="{Binding ActualWidth, ElementName=sp5Ypercent}" />
+                                            <ColumnDefinition Width="{Binding ActualWidth, ElementName=sp7Yvalue}" />
+                                            <ColumnDefinition Width="{Binding ActualWidth, ElementName=sp7Ypercent}" />
+                                            <ColumnDefinition Width="{Binding ActualWidth, ElementName=sp10Yvalue}" />
+                                            <ColumnDefinition Width="{Binding ActualWidth, ElementName=sp10Ypercent}" />
+                                        </Grid.ColumnDefinitions>
+                                        <Label Grid.Column="0" Background="#FFFBB843" BorderBrush="Black" FontWeight="Bold" BorderThickness="1"/>
+                                        <Label Grid.Column="1" Grid.ColumnSpan="2" Content="1Y" HorizontalContentAlignment="Center" Background="#FFFBB843" BorderBrush="Black" FontWeight="Bold" BorderThickness="0,1,1,1"/>
+                                        <Label Grid.Column="3" Grid.ColumnSpan="2" Content="3Y" HorizontalContentAlignment="Center" Background="#FFFBB843" BorderBrush="Black" FontWeight="Bold" BorderThickness="0,1,1,1"/>
+                                        <Label Grid.Column="5" Grid.ColumnSpan="2" Content="5Y" HorizontalContentAlignment="Center" Background="#FFFBB843" BorderBrush="Black" FontWeight="Bold" BorderThickness="0,1,1,1"/>
+                                        <Label Grid.Column="7" Grid.ColumnSpan="2" Content="7Y" HorizontalContentAlignment="Center" Background="#FFFBB843" BorderBrush="Black" FontWeight="Bold" BorderThickness="0,1,1,1"/>
+                                        <Label Grid.Column="9" Grid.ColumnSpan="2" Content="10Y" HorizontalContentAlignment="Center" Background="#FFFBB843" BorderBrush="Black" FontWeight="Bold" BorderThickness="0,1,1,1"/>
+                                    </Grid>
+
+                                    <DataGrid Name="BondSpread_curveGrid" 
+                                              RowHeaderWidth="0" Height="230" Margin="0,0,0,0" Grid.Row="1"
+                                              CanUserDeleteRows="False" 
+                                              CanUserAddRows="False" 
+                                              CanUserSortColumns="False" 
+                                              IsReadOnly="True"
+                                              AutoGenerateColumns="False">
+                                        <DataGrid.ColumnHeaderStyle>
+                                            <Style TargetType="{x:Type DataGridColumnHeader}">
+                                                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                            </Style>
+                                        </DataGrid.ColumnHeaderStyle>
+                                        <DataGrid.Columns>
+                                            <DataGridTextColumn Header="名称" Width="*" x:Name="spassetname"   Binding="{Binding Path=name}"/>
+                                            <DataGridTextColumn Header="数值" Width="53" x:Name="sp1Yvalue"    Binding="{Binding Path=1Y    , StringFormat=\{0:F1\}}" ElementStyle="{StaticResource dgCellRightAlignment}"/>
+                                            <DataGridTextColumn Header="分位" Width="53" x:Name="sp1Ypercent"  Binding="{Binding Path=1Y_cd , StringFormat=\{0:P1\}}" ElementStyle="{StaticResource dgCellRightAlignment}"/>
+                                            <DataGridTextColumn Header="数值" Width="53" x:Name="sp3Yvalue"    Binding="{Binding Path=3Y    , StringFormat=\{0:F1\}}" ElementStyle="{StaticResource dgCellRightAlignment}"/>
+                                            <DataGridTextColumn Header="分位" Width="53" x:Name="sp3Ypercent"  Binding="{Binding Path=3Y_cd , StringFormat=\{0:P1\}}" ElementStyle="{StaticResource dgCellRightAlignment}"/>
+                                            <DataGridTextColumn Header="数值" Width="53" x:Name="sp5Yvalue"    Binding="{Binding Path=5Y    , StringFormat=\{0:F1\}}" ElementStyle="{StaticResource dgCellRightAlignment}"/>
+                                            <DataGridTextColumn Header="分位" Width="53" x:Name="sp5Ypercent"  Binding="{Binding Path=5Y_cd , StringFormat=\{0:P1\}}" ElementStyle="{StaticResource dgCellRightAlignment}"/>
+                                            <DataGridTextColumn Header="数值" Width="53" x:Name="sp7Yvalue"    Binding="{Binding Path=7Y    , StringFormat=\{0:F1\}}" ElementStyle="{StaticResource dgCellRightAlignment}"/>
+                                            <DataGridTextColumn Header="分位" Width="53" x:Name="sp7Ypercent"  Binding="{Binding Path=7Y_cd , StringFormat=\{0:P1\}}" ElementStyle="{StaticResource dgCellRightAlignment}"/>
+                                            <DataGridTextColumn Header="数值" Width="53" x:Name="sp10Yvalue"   Binding="{Binding Path=10Y   , StringFormat=\{0:F1\}}" ElementStyle="{StaticResource dgCellRightAlignment}"/>
+                                            <DataGridTextColumn Header="分位" Width="53" x:Name="sp10Ypercent" Binding="{Binding Path=10Y_cd, StringFormat=\{0:P1\}}" ElementStyle="{StaticResource dgCellRightAlignment}"/>
+                                        </DataGrid.Columns>
+                                    </DataGrid>
+                                </Grid>
+                            </StackPanel>
+
+                            <StackPanel Margin="5,0,0,0" Grid.Column="1">
+                                <StackPanel Margin="10,2,0,1" Orientation="Horizontal">
+                                    <RadioButton Name="RadioButton_termChart" Content="曲线斜率" Margin="10,2,0,1" IsChecked="True" Click="RadioButton_termChart_Click"/>
+                                    <RadioButton Name="RadioButton_curveChart" Content="信用利差" Margin="10,2,0,1" Click="RadioButton_curveChart_Click"/>
+                                </StackPanel>
+                                <StackPanel Margin="10,2,0,1" Orientation="Horizontal">
+                                    <Label Content="起始日期" HorizontalAlignment="Left" Margin="10,2,0,1"/>
+                                    <DatePicker Name="selectDate_BondSpread_Chart_start" Width="100" Margin="5,2,0,1"/>
+                                    <Label Content="截止日期" HorizontalAlignment="Left" Margin="10,2,0,1"/>
+                                    <DatePicker Name="selectDate_BondSpread_Chart_end" Width="100" Margin="5,2,0,1"/>
+                                </StackPanel>
+                                <StackPanel Margin="10,2,0,1" Orientation="Horizontal">
+                                    <Label Content="选择品种" Margin="10,2,0,1"/>
+                                    <ComboBox Name="selectAssetName_BondSpread" Width="150" Height="25" Margin="5,2,0,1"/>
+                                    <Label Content="期限" Margin="0,2,0,1"/>
+                                    <ComboBox Name="selectTerm_BondSpread" Width="80" Height="25" Margin="5,2,0,1"/>
+                                    <Button Width="60" Margin="10,2,0,1" Content="查询" Click="Button_Click_BondSpread_Chart"/>
+                                </StackPanel>
+
+                                <Label Content="收益率曲线形态和利差走势" HorizontalContentAlignment="Center" Margin="0,5,0,0" FontWeight="Bold">
+                                    <Label.Background>
+                                        <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                                            <GradientStop Color="#FF0452FB" Offset="0"/>
+                                            <GradientStop Color="#FF0452FB" Offset="1"/>
+                                            <GradientStop Color="#FFFBFBF5" Offset="0.504"/>
+                                        </LinearGradientBrush>
+                                    </Label.Background>
+                                </Label>
+                                <dxc:ChartControl Height="280" Width="650">
+                                    <dxc:ChartControl.Legend>
+                                        <dxc:Legend Orientation="Horizontal" HorizontalPosition="Center" Background="Transparent" VerticalPosition="BottomOutside" IndentFromDiagram="0,16,16,16" Visible="True"/>
+                                    </dxc:ChartControl.Legend>
+                                    <dxc:XYDiagram2D Width="400">
+                                        <dxc:LineSeries2D Name="BondSpread_curveChart"  ArgumentDataMember="pricingdate"  ValueDataMember="value" LabelsVisibility="False" />
+                                    </dxc:XYDiagram2D>
+                                </dxc:ChartControl>
+
+                                <Grid Margin="0,5,0,0"   Width="300" Height="150" HorizontalAlignment="Left">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="1*"/>
+                                        <ColumnDefinition Width="2*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Label Grid.Row="0" BorderBrush="Black" Grid.ColumnSpan="2" HorizontalContentAlignment="Center" Background="#FFFBB843" FontWeight="Bold" BorderThickness="1" Content="数据统计"/>
+                                    <Label Grid.Row="1" BorderBrush="Black" Grid.Column="0" HorizontalContentAlignment="Center" Background="#FFECE6E6" BorderThickness="1,0,0,1" Content="样本数"/>
+                                    <TextBox Name="spread_stat_count" Grid.Row="1" BorderBrush="Black" Grid.Column="1" HorizontalContentAlignment="Center" BorderThickness="1,0,1,1"/>
+                                    <Label Grid.Row="2" BorderBrush="Black" Grid.Column="0" HorizontalContentAlignment="Center" Background="#FFECE6E6" BorderThickness="1,0,0,1" Height="26.837" VerticalAlignment="Bottom" Content="最大值"/>
+                                    <TextBox Name="spread_stat_max" Grid.Row="2" BorderBrush="Black" Grid.Column="1" HorizontalContentAlignment="Center" BorderThickness="1,0,1,1"/>
+                                    <Label Grid.Row="3" BorderBrush="Black" Grid.Column="0" HorizontalContentAlignment="Center" Background="#FFECE6E6" BorderThickness="1,0,0,1" Content="最小值"/>
+                                    <TextBox Name="spread_stat_min" Grid.Row="3" BorderBrush="Black" Grid.Column="1" HorizontalContentAlignment="Center" BorderThickness="1,0,1,1"/>
+                                    <Label Grid.Row="4" BorderBrush="Black" Grid.Column="0" HorizontalContentAlignment="Center" Background="#FFECE6E6" BorderThickness="1,0,0,1" Content="平均值"/>
+                                    <TextBox Name="spread_stat_avg" Grid.Row="4" BorderBrush="Black" Grid.Column="1" HorizontalContentAlignment="Center" BorderThickness="1,0,1,1"/>
+                                    <Label Grid.Row="5" BorderBrush="Black" Grid.Column="0" HorizontalContentAlignment="Center" Background="#FFECE6E6" BorderThickness="1,0,0,1" Content="期末值"/>
+                                    <TextBox Name="spread_stat_last" Grid.Row="5" BorderBrush="Black" Grid.Column="1" HorizontalContentAlignment="Center" BorderThickness="1,0,1,1"/>
+                                </Grid>
+                            </StackPanel>
+                        </Grid>
+                    </dx:DXTabItem>
+
+                    <dx:DXTabItem Header="持有期回报">
+                        <StackPanel>
+                            <StackPanel Height="28" Orientation="Horizontal">
+                                <RadioButton Content="中长期债券" VerticalAlignment="Center"/>
+                                <RadioButton Content="短期债券" Margin="5,0,0,0" VerticalAlignment="Center"/>
+                                <DatePicker Width="120" Margin="5,0,0,0" VerticalAlignment="Center"/>
+                                <Label Content="持有期限" Margin="5,0,0,0" VerticalAlignment="Center" HorizontalContentAlignment="Center"/>
+                                <ComboBox  Width="60" VerticalAlignment="Center"/>
+                                <Label Content="回购利率（%）" Margin="10,0,0,0" VerticalAlignment="Center" HorizontalContentAlignment="Center"/>
+                                <TextBox Width="50" VerticalAlignment="Center" HorizontalContentAlignment="Center"/>
+                                <Label Content="选择品种" Margin="10,0,0,0" VerticalAlignment="Center" HorizontalContentAlignment="Center"/>
+                                <ComboBox  Width="200" VerticalAlignment="Center"/>
+                                <Button Margin="10,0,0,0"  VerticalAlignment="Center" Content="获取收益率曲线"/>
+                                <Button Name="holdingReturn" Margin="10,0,0,0"  VerticalAlignment="Center" Content="开始计算" Background="#FFFBB843" Click="holdingReturn_Click"/>
+                            </StackPanel>
+
+                            <Label Content="债券持有期回报及敏感性（未年化）" Margin="0,3,0,0" HorizontalContentAlignment="Center" FontWeight="Bold">
+                                <Label.Background>
+                                    <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                                        <GradientStop Color="#FF0452FB" Offset="0"/>
+                                        <GradientStop Color="#FF0452FB" Offset="1"/>
+                                        <GradientStop Color="#FFFBFBF5" Offset="0.504"/>
+                                    </LinearGradientBrush>
+                                </Label.Background>
+                            </Label>
+                            <DataGrid Name="HoldingReturn_Grid" Height="400"
+                                      CanUserDeleteRows="False" 
+                                      CanUserAddRows="False" 
+                                      CanUserSortColumns="False" 
+                                      IsReadOnly="True"
+                                      AutoGenerateColumns="False">
+                                <DataGrid.ColumnHeaderStyle>
+                                    <Style TargetType="{x:Type DataGridColumnHeader}">
+                                        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                                    </Style>
+                                </DataGrid.ColumnHeaderStyle>
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="剩余期限" Width="*"     Binding="{Binding Path=term          }" ElementStyle="{StaticResource dgCellRightAlignment}"/>
+                                    <DataGridTextColumn Header="YTM-now" Width="100"   Binding="{Binding Path=Yield         }" ElementStyle="{StaticResource dgCellRightAlignment}"/>
+                                    <DataGridTextColumn Header="Par" Width="80"        Binding="{Binding Path=AdjYield(Par) }" ElementStyle="{StaticResource dgCellRightAlignment}"/>
+                                    <DataGridTextColumn Header="久期" Width="80"       Binding="{Binding Path=Duration      }" ElementStyle="{StaticResource dgCellRightAlignment}"/>
+                                    <DataGridTextColumn Header="YTM-end" Width="100"   Binding="{Binding Path=YTM_AfterHold }" ElementStyle="{StaticResource dgCellRightAlignment}"/>
+                                    <DataGridTextColumn Header="RollDown" Width="100"  Binding="{Binding Path=RollDown      }" ElementStyle="{StaticResource dgCellRightAlignment}"/>
+                                    <DataGridTextColumn Header="HoldYield" Width="100" Binding="{Binding Path=Hold_Yield    }" ElementStyle="{StaticResource dgCellRightAlignment}"/>
+                                    <DataGridTextColumn Header="-30bp" Width="70"      Binding="{Binding Path=-30Bp         }" ElementStyle="{StaticResource dgCellRightAlignment}"/>
+                                    <DataGridTextColumn Header="-20bp" Width="70"      Binding="{Binding Path=-20Bp         }" ElementStyle="{StaticResource dgCellRightAlignment}"/>
+                                    <DataGridTextColumn Header="-10bp" Width="70"      Binding="{Binding Path=-10Bp         }" ElementStyle="{StaticResource dgCellRightAlignment}"/>
+                                    <DataGridTextColumn Header="+10bp" Width="70"      Binding="{Binding Path=+10Bp         }" ElementStyle="{StaticResource dgCellRightAlignment}"/>
+                                    <DataGridTextColumn Header="+20bp" Width="70"      Binding="{Binding Path=+20Bp         }" ElementStyle="{StaticResource dgCellRightAlignment}"/>
+                                    <DataGridTextColumn Header="+30bp" Width="70"      Binding="{Binding Path=+30Bp         }" ElementStyle="{StaticResource dgCellRightAlignment}"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </StackPanel>
+                    </dx:DXTabItem>
+
+                    <dx:DXTabItem Header="价差对比">
+                        <Grid Background="Transparent">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="50*"/>
+                                <ColumnDefinition Width="50*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Grid.Column="0">
+                                <StackPanel Height="30" Orientation="Horizontal">
+                                    <Label Content="活跃券代码" Margin="5,0,0,0" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
+                                    <TextBox Width="60" VerticalAlignment="Center" VerticalContentAlignment="Center" />
+                                    <Label Content="对比券代码" Margin="5,0,0,0" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
+                                    <TextBox Width="60" VerticalAlignment="Center" VerticalContentAlignment="Center" />
+                                    <RadioButton Content="中债估值"  Margin="5,0,0,0" VerticalAlignment="Center" IsChecked="True"/>
+                                    <RadioButton Content="中证估值" Margin="5,0,0,0" VerticalAlignment="Center"/>
+                                    <Button Content="开始比较" Margin="20,0,0,0" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
+                                </StackPanel>
+
+                                <StackPanel Height="30" Orientation="Horizontal">
+                                    <Label Content="起始日期" Margin="5,0,0,0" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
+                                    <DatePicker Width="120" VerticalAlignment="Center"/>
+                                    <Label Content="截止日期" Margin="5,0,0,0" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
+                                    <DatePicker Width="120" VerticalAlignment="Center"/>
+                                </StackPanel>
+
+                                <DataGrid/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="1">
+                                <Label Content="活跃券价差走势对比" Margin="5,3,0,0" HorizontalContentAlignment="Center" FontWeight="Bold">
+                                    <Label.Background>
+                                        <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                                            <GradientStop Color="#FF0452FB" Offset="0"/>
+                                            <GradientStop Color="#FF0452FB" Offset="1"/>
+                                            <GradientStop Color="#FFFBFBF5" Offset="0.504"/>
+                                        </LinearGradientBrush>
+                                    </Label.Background>
+                                </Label>
+
+                                <dxc:ChartControl Height="280" Margin="5,0,0,0">
+                                    <dxc:ChartControl.Legend>
+                                        <dxc:Legend/>
+                                    </dxc:ChartControl.Legend>
+                                    <dxc:XYDiagram2D>
+                                        <dxc:BarSideBySideSeries2D DisplayName="Series 1"/>
+                                    </dxc:XYDiagram2D>
+                                </dxc:ChartControl>
+
+                                <Grid Margin="5,5,0,0"   Width="300" Height="150" HorizontalAlignment="Left">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="1*"/>
+                                        <ColumnDefinition Width="2*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Label Grid.Row="0" BorderBrush="Black" Grid.ColumnSpan="2" HorizontalContentAlignment="Center" Background="#FFFBB843" FontWeight="Bold" BorderThickness="1" Content="数据统计"/>
+                                    <Label Grid.Row="1" BorderBrush="Black" Grid.Column="0" HorizontalContentAlignment="Center" Background="#FFECE6E6" BorderThickness="1,0,0,1" Content="样本数"/>
+                                    <TextBox Grid.Row="1" BorderBrush="Black" Grid.Column="1" HorizontalContentAlignment="Center" BorderThickness="1,0,1,1"/>
+                                    <Label Grid.Row="2" BorderBrush="Black" Grid.Column="0" HorizontalContentAlignment="Center" Background="#FFECE6E6" BorderThickness="1,0,0,1" Height="26.837" VerticalAlignment="Bottom" Content="最大值"/>
+                                    <TextBox Grid.Row="2" BorderBrush="Black" Grid.Column="1" HorizontalContentAlignment="Center" BorderThickness="1,0,1,1"/>
+                                    <Label Grid.Row="3" BorderBrush="Black" Grid.Column="0" HorizontalContentAlignment="Center" Background="#FFECE6E6" BorderThickness="1,0,0,1" Content="最小值"/>
+                                    <TextBox Grid.Row="3" BorderBrush="Black" Grid.Column="1" HorizontalContentAlignment="Center" BorderThickness="1,0,1,1"/>
+                                    <Label Grid.Row="4" BorderBrush="Black" Grid.Column="0" HorizontalContentAlignment="Center" Background="#FFECE6E6" BorderThickness="1,0,0,1" Content="平均值"/>
+                                    <TextBox Grid.Row="4" BorderBrush="Black" Grid.Column="1" HorizontalContentAlignment="Center" BorderThickness="1,0,1,1"/>
+                                    <Label Grid.Row="5" BorderBrush="Black" Grid.Column="0" HorizontalContentAlignment="Center" Background="#FFECE6E6" BorderThickness="1,0,0,1" Content="期末值"/>
+                                    <TextBox Grid.Row="5" BorderBrush="Black" Grid.Column="1" HorizontalContentAlignment="Center" BorderThickness="1,0,1,1"/>
+                                </Grid>
+                            </StackPanel>
+
+                        </Grid>
+                    </dx:DXTabItem>
+                    <dx:DXTabItem Header="活跃券报价">
+                        <Grid Background="Transparent">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="50*"/>
+                                <ColumnDefinition Width="50*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Grid.Column="0">
+                                <StackPanel Height="30" Orientation="Horizontal">
+                                    <Label Content="代码" Margin="5,0,0,0" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
+                                    <TextBox Width="60" VerticalAlignment="Center" VerticalContentAlignment="Center" />
+                                    <Label Content="起始日期" Margin="5,0,0,0" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
+                                    <DatePicker Width="120" VerticalAlignment="Center"/>
+                                    <Label Content="截止日期" Margin="5,0,0,0" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
+                                    <DatePicker Width="120" VerticalAlignment="Center"/>
+                                    <Button Content="查询" Margin="20,0,0,0" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
+                                </StackPanel>
+
+                                <StackPanel Height="30" Orientation="Horizontal">
+                                    <Label Content="报价机构" Margin="5,0,0,0" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
+                                    <ComboBox Width="200" VerticalAlignment="Center"/>
+                                </StackPanel>
+
+                                <DataGrid/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="1">
+                                <Label Content="最优报价统计" Margin="5,3,0,0" HorizontalContentAlignment="Center" FontWeight="Bold">
+                                    <Label.Background>
+                                        <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                                            <GradientStop Color="#FF0452FB" Offset="0"/>
+                                            <GradientStop Color="#FF0452FB" Offset="1"/>
+                                            <GradientStop Color="#FFFBFBF5" Offset="0.504"/>
+                                        </LinearGradientBrush>
+                                    </Label.Background>
+                                </Label>
+                                <DataGrid Margin="5,0,0,0"/>
+                            </StackPanel>
+
+                        </Grid>
+                    </dx:DXTabItem>
+                </dx:DXTabControl>
+
+            </Grid>
+        </Grid>
+    </Grid>
+</UserControl>
